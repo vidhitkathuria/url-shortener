@@ -3,10 +3,11 @@ const {
   handleGenerateNewShortURL,
   handleGetAnalytics,
 } = require("../controllers/url");
+const { protect } = require("../middlewares/auth.js");
 
 const router = express.Router();
 
-router.post("/", handleGenerateNewShortURL);
+router.post("/", protect, handleGenerateNewShortURL);
 
 router.get("/analytics/:shortId", handleGetAnalytics);
 

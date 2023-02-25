@@ -12,10 +12,9 @@ const urlSchema = new mongoose.Schema(
       required: true,
     },
     visitHistory: [{ timestamp: { type: Number } }],
-    created: {
+    expiration: {
       type: Date,
-      default: Date.now,
-      expires: 2592000, // 30 days in seconds
+      default: Date.now() + (60 * 60 * 24 * 30 * 1000)
     },
   },
 

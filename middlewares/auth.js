@@ -7,7 +7,7 @@ const protect = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
-      token = headers.authorization.split("")[1];
+      token = req.headers.authorization.split(" ")[1];
 
       //verify token
 
@@ -20,11 +20,12 @@ const protect = async (req, res, next) => {
         error: "not authorized",
       });
     }
-    if (!token) {
-      return res.status(401).json({
-        error: "not authorized, no token",
-      });
-    }
+  }
+  if (!token) {
+    console.log("hi");
+    return res.status(401).json({
+      error: "not authorized, no token",
+    });
   }
 };
 module.exports = { protect };
