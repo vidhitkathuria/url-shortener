@@ -20,8 +20,6 @@ app.use("/api/users", userRoutes);
 app.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
 
-  const url = await URL.find({ shortId });
-
   const entry = await URL.findOneAndUpdate(
     {
       shortId,
@@ -32,7 +30,7 @@ app.get("/:shortId", async (req, res) => {
           timestamp: Date.now(),
         },
       },
-      expiration: Date.now(url.expiration) + 1000 * 60 * 60 * 24 * 30,
+      expiration: new Date().getTime() + 1000 * 60 * 60 * 24 * 30,
     }
   );
   res.redirect(entry.redirectURL);

@@ -1,6 +1,7 @@
 const shortid = require("shortid");
 const URL = require("../models/url");
 const cron = require("node-cron");
+
 async function handleGenerateNewShortURL(req, res) {
   const body = req.body;
   if (!body.url) return res.status(400).json({ error: "url is required" });
@@ -28,11 +29,15 @@ async function handleGetAnalytics(req, res) {
 
 // Run the task every day at midnight
 cron.schedule("0 0 * * *", async () => {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  console.log("cron running ---");
+  const now = new Date();
+  const thirtyDaysBack = new Date(now.setDate(now.getDate()));
+
+  console.log(thirtyDaysBack);
 
   // Delete documents that are older than 30 days
-  await ShortUrl.deleteMany({ created: { $lt: thirtyDaysAgo } });
+  await URL.deleteMany({ expiration: { $lt: thirtyDaysBack } });
+  console.log("deleted using cron");
 });
 
 module.exports = {
